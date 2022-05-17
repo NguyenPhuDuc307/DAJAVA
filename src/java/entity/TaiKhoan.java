@@ -16,11 +16,12 @@ public class TaiKhoan {
     private String EMAIL;
     private String PASSWORD;
     private boolean ADMIN;
+    private String HINHANH;
 
     public TaiKhoan() {
     }
 
-    public TaiKhoan(int IDTAIKHOAN, String MAKHACHSAN, String HOTEN, String DIENTHOAI, String EMAIL, String PASSWORD, boolean ADMIN) {
+    public TaiKhoan(int IDTAIKHOAN, String MAKHACHSAN, String HOTEN, String DIENTHOAI, String EMAIL, String PASSWORD, boolean ADMIN, String HINHANH) {
         this.IDTAIKHOAN = IDTAIKHOAN;
         this.MAKHACHSAN = MAKHACHSAN;
         this.HOTEN = HOTEN;
@@ -28,6 +29,7 @@ public class TaiKhoan {
         this.EMAIL = EMAIL;
         this.PASSWORD = PASSWORD;
         this.ADMIN = ADMIN;
+        this.HINHANH = HINHANH;
     }
 
     public int getIDTAIKHOAN() {
@@ -78,7 +80,7 @@ public class TaiKhoan {
         this.PASSWORD = PASSWORD;
     }
 
-    public boolean getADMIN() {
+    public boolean isADMIN() {
         return ADMIN;
     }
 
@@ -86,8 +88,16 @@ public class TaiKhoan {
         this.ADMIN = ADMIN;
     }
 
+    public String getHINHANH() {
+        return HINHANH;
+    }
+
+    public void setHINHANH(String HINHANH) {
+        this.HINHANH = HINHANH;
+    }
+
     @Override
     public String toString() {
-        return "Account{" + "IDTAIKHOAN=" + IDTAIKHOAN + ", MAKHACHSAN=" + MAKHACHSAN + ", HOTEN=" + HOTEN + ", DIENTHOAI=" + DIENTHOAI + ", EMAIL=" + EMAIL + ", PASSWORD=" + PASSWORD + ", ADMIN=" + ADMIN + '}';
+        return "TaiKhoan{" + "IDTAIKHOAN=" + IDTAIKHOAN + ", MAKHACHSAN=" + MAKHACHSAN + ", HOTEN=" + HOTEN + ", DIENTHOAI=" + DIENTHOAI + ", EMAIL=" + EMAIL + ", PASSWORD=" + PASSWORD + ", ADMIN=" + ADMIN + ", HINHANH=" + HINHANH + '}';
     }
 }

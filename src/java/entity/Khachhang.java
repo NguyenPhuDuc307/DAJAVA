@@ -14,16 +14,18 @@ public class Khachhang {
     private String DIENTHOAI;
     private String EMAIL;
     private String PASSWORD;
+    private String HINHANH;
 
     public Khachhang() {
     }
 
-    public Khachhang(int IDKHACHHANG, String HOTEN, String DIENTHOAI, String EMAIL, String PASSWORD) {
+    public Khachhang(int IDKHACHHANG, String HOTEN, String DIENTHOAI, String EMAIL, String PASSWORD, String HINHANH) {
         this.IDKHACHHANG = IDKHACHHANG;
         this.HOTEN = HOTEN;
         this.DIENTHOAI = DIENTHOAI;
         this.EMAIL = EMAIL;
         this.PASSWORD = PASSWORD;
+        this.HINHANH = HINHANH;
     }
 
     public int getIDKHACHHANG() {
@@ -66,9 +68,14 @@ public class Khachhang {
         this.PASSWORD = PASSWORD;
     }
 
-    @Override
-    public String toString() {
-        return "Khachhang{" + "IDKHACHHANG=" + IDKHACHHANG + ", HOTEN=" + HOTEN + ", DIENTHOAI=" + DIENTHOAI + ", EMAIL=" + EMAIL + ", PASSWORD=" + PASSWORD + '}';
+    public String getHINHANH() {
+        return HINHANH;
+    }
+
+    public void setHINHANH(String HINHANH) {
+        this.HINHANH = HINHANH;
     }
     
+    
+
 }

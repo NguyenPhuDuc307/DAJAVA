@@ -64,11 +64,21 @@
 
                     <c:if test="${sessionScope.acc != null}" >
                         <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle nav-item dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle nav-item dropdown" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Xin chào ${sessionScope.acc.HOTEN}!
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
+
+                                <c:choose>
+                                    <c:when test="${sessionScope.istk}">
+                                        <li><a class="dropdown-item" href="thongtintaikhoan?id=${sessionScope.acc.IDTAIKHOAN}">Thông tin tài khoản</a></li>
+                                        </c:when>
+                                        <c:otherwise>
+                                        <li><a class="dropdown-item" href="thongtinkhachhang?id=${sessionScope.acc.IDKHACHHANG}">Thông tin khách hàng</a></li>
+                                        </c:otherwise>
+                                    </c:choose>
+
+
                                 <li><hr class="dropdown-divider"></li>
 
                                 <c:if test="${sessionScope.acc != null}" >              

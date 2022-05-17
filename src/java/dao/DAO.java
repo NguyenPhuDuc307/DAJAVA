@@ -6,11 +6,9 @@ import entity.Datphong;
 import entity.Khachhang;
 import entity.Khachsan;
 import entity.LoaiPhong;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -236,12 +234,36 @@ public class DAO {
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4), 
-                            rs.getString(5));
+                            rs.getString(5),
+                            rs.getString(6));
                 }
            } catch (Exception e) {
            }
            return null;
        }
+    
+    public Khachhang getKH(String id){
+           String query = "select * from tb_KHACHHANG where IDKHACHHANG = ?";
+           try {
+               conn = new DBContext().getConnection();
+                ps = conn.prepareStatement(query);
+                ps.setString(1, id);
+                rs = ps.executeQuery();
+                while (rs.next()){
+                    return new Khachhang(rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4), 
+                            rs.getString(5),
+                            rs.getString(6)
+                    );
+                }
+           } catch (Exception e) {
+           }
+           return null;
+       }
+    
+    
     public Khachhang checkExist(String email ){
            String query = "select * from tb_KHACHHANG	\n" +
                             "where EMAIL = ?\n" ;
@@ -255,7 +277,8 @@ public class DAO {
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4), 
-                            rs.getString(5));
+                            rs.getString(5),
+                            rs.getString(6));
                 }
            } catch (Exception e) {
            }
