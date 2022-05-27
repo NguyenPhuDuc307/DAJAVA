@@ -6,7 +6,6 @@ package entity;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 /**
  *

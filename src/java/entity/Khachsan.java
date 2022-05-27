@@ -32,6 +32,8 @@ public class Khachsan {
         this.NGUNG = NGUNG;
     }
 
+    
+
     public String getMAKHACHSAN() {
         return MAKHACHSAN;
     }

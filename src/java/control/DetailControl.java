@@ -22,7 +22,12 @@ public class DetailControl extends HttpServlet {
         String MAKS = request.getParameter("id");
         DAO dao = new DAO();
         List<LoaiPhong> listloaiphong = dao.getAllLoaiphongByMaKS(MAKS);
+        
         Khachsan ks = dao.getKSByMA(MAKS);
+        
+        List<Khachsan> list = dao.getAllKhachsan();
+        request.setAttribute("listKS", list);
+        
         
         
         request.setAttribute("detail", listloaiphong);

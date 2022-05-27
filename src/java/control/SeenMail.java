@@ -1,42 +1,50 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package control;
 
-import dao.objKhachSan;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+@WebServlet(name = "SeenMail", urlPatterns = {"/seenmail"})
+public class SeenMail extends HttpServlet {
 
-/**
- *
- * @author bigbo
- */
-@WebServlet(name = "DeleteKhachSanControl", urlPatterns = {"/DeleteKhachSanControl"})
-public class DeleteKhachSanControl extends HttpServlet {
+    public static void send(String to, String tieude, String noidung, final String user, final String pass) {
+        Properties props = new Properties();
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+        props.put("mail.smtp.host", "smtp.gmail.com");
+
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, pass);
+            }
+        });
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(tieude);
+            message.setContent(noidung, "text/html; charset=UTF-8");
+            Transport.send(message);
+
+        } catch (MessagingException e) {
+        }
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String maks = request.getParameter("IDKS");
-        
-        objKhachSan dao = new objKhachSan();
-        dao.deleteKhachSan(maks);
-        response.sendRedirect("KhachSanControl");
-    }
 
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

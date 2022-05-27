@@ -18,11 +18,13 @@ public class LoaiPhong {
     private int SOLUONG;
     private boolean TRANGTHAI;
     private boolean NGUNG;
+    private String TENKHACHSAN;
+    private int HANG;
 
     public LoaiPhong() {
     }
 
-    public LoaiPhong(int IDLOAIPHONG, String MAKHACHSAN, String TENLOAIPHONG, String MOTA, String HINHANH, Float GIAPHONG, int SOLUONG, boolean TRANGTHAI, boolean NGUNG) {
+    public LoaiPhong(int IDLOAIPHONG, String MAKHACHSAN, String TENLOAIPHONG, String MOTA, String HINHANH, Float GIAPHONG, int SOLUONG, boolean TRANGTHAI, boolean NGUNG, String TENKHACHSAN, int HANG) {
         this.IDLOAIPHONG = IDLOAIPHONG;
         this.MAKHACHSAN = MAKHACHSAN;
         this.TENLOAIPHONG = TENLOAIPHONG;
@@ -32,6 +34,8 @@ public class LoaiPhong {
         this.SOLUONG = SOLUONG;
         this.TRANGTHAI = TRANGTHAI;
         this.NGUNG = NGUNG;
+        this.TENKHACHSAN = TENKHACHSAN;
+        this.HANG = HANG;
     }
 
     public int getIDLOAIPHONG() {
@@ -106,8 +110,25 @@ public class LoaiPhong {
         this.NGUNG = NGUNG;
     }
 
+    public String getTENKHACHSAN() {
+        return TENKHACHSAN;
+    }
+
+    public void setTENKHACHSAN(String TENKHACHSAN) {
+        this.TENKHACHSAN = TENKHACHSAN;
+    }
+
+    public int getHANG() {
+        return HANG;
+    }
+
+    public void setHANG(int HANG) {
+        this.HANG = HANG;
+    }
+
     @Override
     public String toString() {
-        return "LoaiPhong{" + "IDLOAIPHONG=" + IDLOAIPHONG + ", MAKHACHSAN=" + MAKHACHSAN + ", TENLOAIPHONG=" + TENLOAIPHONG + ", MOTA=" + MOTA + ", HINHANH=" + HINHANH + ", GIAPHONG=" + GIAPHONG + ", SOLUONG=" + SOLUONG + ", TRANGTHAI=" + TRANGTHAI + ", NGUNG=" + NGUNG + '}';
+        return "LoaiPhong{" + "IDLOAIPHONG=" + IDLOAIPHONG + ", MAKHACHSAN=" + MAKHACHSAN + ", TENLOAIPHONG=" + TENLOAIPHONG + ", MOTA=" + MOTA + ", HINHANH=" + HINHANH + ", GIAPHONG=" + GIAPHONG + ", SOLUONG=" + SOLUONG + ", TRANGTHAI=" + TRANGTHAI + ", NGUNG=" + NGUNG + ", TENKHACHSAN=" + TENKHACHSAN + ", HANG=" + HANG + '}';
     }
+
 }

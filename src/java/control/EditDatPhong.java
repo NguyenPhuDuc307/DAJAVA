@@ -1,10 +1,13 @@
 package control;
 
 import dao.DAO;
-import entity.enQuanlyDP;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -12,36 +15,60 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "Thanhtoan", urlPatterns = {"/thanhtoan"})
-public class Thanhtoan extends HttpServlet {
+/**
+ *
+ * @author nguye
+ */
+@WebServlet(name = "EditDatPhong", urlPatterns = {"/editdatphong"})
+public class EditDatPhong extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-
+        
+        
+//        giotra     
+        Date dNow = new Date();
+        SimpleDateFormat ft =  new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+        String ngaytra = ft.format(dNow);
+        
+//        thanhtien
+        int thanhtien;
+        int giaphong = Integer.valueOf(request.getParameter("giaphong"));
+        int songuoi = Integer.valueOf(request.getParameter("songuoi"));
+        
+        String ngaydatString = request.getParameter("ngaydat");
+        
+        Date ngaydat = ft.parse(ngaydatString);
+        
+        Calendar calendar = GregorianCalendar.getInstance();
+        
+        calendar.setTime(ngaydat);
+        
+        long differenceGio = LocalDateTime.now().getHour()- calendar.get(Calendar.HOUR_OF_DAY);
+        
+        long differenceNgay = (ngaydat.getTime()- dNow.getTime())/3600000;
+        
+        long difference = Math.abs(differenceNgay + differenceGio);
+        
+        thanhtien = (int) ((int) (giaphong+ (giaphong*(songuoi-1)*0.7))*difference/24) ;
+        
+        if(thanhtien<giaphong) 
+        {
+            thanhtien = (int) (giaphong*1);
+        }
+        
         DAO dao = new DAO();
-
-        int MALOAIPHONG = Integer.valueOf(request.getParameter("maloaiphong"));
-        int idkh = Integer.valueOf(request.getParameter("idkh"));
-        int IDDATPHONG = Integer.valueOf(request.getParameter("idDP"));
-        int SONGUOIO = Integer.valueOf(request.getParameter("songuoi"));
-        String gdDateTime = request.getParameter("ngayden");
-        String gtDateTime = request.getParameter("ngaydi");
-        int thanhtien = Integer.valueOf(request.getParameter("thanhtien"));
-
-        dao.DatphongCT(MALOAIPHONG, IDDATPHONG, SONGUOIO, gdDateTime, gtDateTime, thanhtien);
-        List<enQuanlyDP> listDP = dao.getDatPhongChuaTT(idkh);
-
-        HttpSession session = request.getSession();
-        session.setAttribute("count", listDP.size());
-        session.setAttribute("tb", "true");
-        response.sendRedirect("Thanhtoan.jsp");
-
+//        idDP
+        String idDP = request.getParameter("iddatphong");
+        String iddpct = request.getParameter("iddpct");
+        dao.editDatPhong(idDP);
+        
+        dao.editDatPhongCT(ngaytra, thanhtien, iddpct);
+        
+        response.sendRedirect("quanlydatphong");
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -57,7 +84,7 @@ public class Thanhtoan extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
-            Logger.getLogger(Adddatphong.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditDatPhong.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -75,7 +102,7 @@ public class Thanhtoan extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
-            Logger.getLogger(Adddatphong.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditDatPhong.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

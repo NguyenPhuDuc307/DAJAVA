@@ -1,6 +1,7 @@
 package control;
 
 import dao.DAO;
+import entity.Khachsan;
 import entity.LoaiPhong;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -27,7 +28,10 @@ public class Datphong extends HttpServlet {
         
         LoaiPhong loaiphong = dao.getLoaiPhongKhachsan(IDLP);
         
+        Khachsan ks = dao.getKSByMA(loaiphong.getMAKHACHSAN());
+        
         request.setAttribute("loaiphong", loaiphong);
+        request.setAttribute("ks", ks);
         
         request.getRequestDispatcher("Datphong.jsp").forward(request, response);
         

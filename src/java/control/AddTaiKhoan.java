@@ -1,19 +1,23 @@
 package control;
 
-import dao.objKhachSan;
 import dao.objTaiKhoan;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 
 @WebServlet(name = "AddTaiKhoan", urlPatterns = {"/AddTaiKhoan"})
 public class AddTaiKhoan extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
@@ -25,7 +29,13 @@ public class AddTaiKhoan extends HttpServlet {
         Boolean ADMIN = false;
         
         objTaiKhoan dao = new objTaiKhoan();
-        dao.addTaiKhoan(MAKHACHSAN, HOTEN, DIENTHOAI, EMAIL, PASSWORD, ADMIN);
+        
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(PASSWORD.getBytes());
+        byte[] digest = md.digest();
+        String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+        
+        dao.addTaiKhoan(MAKHACHSAN, HOTEN, DIENTHOAI, EMAIL, myHash, ADMIN);
         response.sendRedirect("TaiKhoanControl");
     }
 
@@ -41,7 +51,11 @@ public class AddTaiKhoan extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(AddTaiKhoan.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -55,7 +69,11 @@ public class AddTaiKhoan extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(AddTaiKhoan.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

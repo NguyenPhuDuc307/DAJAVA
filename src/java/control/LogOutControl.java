@@ -32,7 +32,9 @@ public class LogOutControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         session.removeAttribute("acc");
-        session.setAttribute("istk", false);
+        session.removeAttribute("istk");
+        session.removeAttribute("countQL");
+        session.removeAttribute("iskh");
         response.sendRedirect("home");
     }
 

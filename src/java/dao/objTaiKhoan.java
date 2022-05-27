@@ -5,7 +5,6 @@
 package dao;
 
 import context.DBContext;
-import entity.Khachsan;
 import entity.TaiKhoan;
 import entity.TaikhoanFull;
 import java.sql.Connection;
@@ -49,7 +48,7 @@ public class objTaiKhoan {
                         " dbo.tb_TAIKHOAN.HOTEN, dbo.tb_TAIKHOAN.DIENTHOAI, dbo.tb_TAIKHOAN.EMAIL, \n" +
                         " dbo.tb_TAIKHOAN.PASSWORD, dbo.tb_TAIKHOAN.ADMIN, dbo.tb_TAIKHOAN.HINHANH, dbo.tb_KHACHSAN.HINHANH\n" +
                         "FROM dbo.tb_KHACHSAN INNER JOIN\n" +
-                        " dbo.tb_TAIKHOAN ON dbo.tb_KHACHSAN.MAKHACHSAN = dbo.tb_TAIKHOAN.MAKHACHSAN and ADMIN='false'";
+                        " dbo.tb_TAIKHOAN ON dbo.tb_KHACHSAN.MAKHACHSAN = dbo.tb_TAIKHOAN.MAKHACHSAN and ADMIN='false' order by dbo.tb_KHACHSAN.TENKHACHSAN";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);

@@ -4,7 +4,6 @@
  */
 package control;
 
-import dao.objKhachSan;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author bigbo
+ * @author nguye
  */
-@WebServlet(name = "DeleteKhachSanControl", urlPatterns = {"/DeleteKhachSanControl"})
-public class DeleteKhachSanControl extends HttpServlet {
+@WebServlet(name = "LoadLogin", urlPatterns = {"/loadlogin"})
+public class LoadLogin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,11 +29,8 @@ public class DeleteKhachSanControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String maks = request.getParameter("IDKS");
         
-        objKhachSan dao = new objKhachSan();
-        dao.deleteKhachSan(maks);
-        response.sendRedirect("KhachSanControl");
+        response.sendRedirect("Login.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

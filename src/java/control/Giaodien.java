@@ -1,40 +1,47 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package control;
 
-import dao.objKhachSan;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author bigbo
- */
-@WebServlet(name = "DeleteKhachSanControl", urlPatterns = {"/DeleteKhachSanControl"})
-public class DeleteKhachSanControl extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+@WebServlet(name = "Giaodien", urlPatterns = {"/giaodien"})
+public class Giaodien extends HttpServlet {
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String maks = request.getParameter("IDKS");
         
-        objKhachSan dao = new objKhachSan();
-        dao.deleteKhachSan(maks);
-        response.sendRedirect("KhachSanControl");
+        HttpSession session = request.getSession();
+            
+             String dark = "#002233";
+             String light = "#ffffff";
+             String mamauchu = "#002233";
+            
+            String mamau = request.getParameter("mamau");
+            
+            if("".equals(mamau))
+            {
+                mamau = dark;
+                mamauchu = light;
+            }
+            else if(dark.equals(mamau)){
+                mamau = light;
+                mamauchu = dark;
+            }
+            else{
+                mamau = dark;
+                mamauchu = light;
+            }
+                
+            
+            session.setAttribute("mamau", mamau);
+            session.setAttribute("mamauchu", mamauchu);
+        response.sendRedirect("home"); // chuyen trang ma ko can mang thep du lieu
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
