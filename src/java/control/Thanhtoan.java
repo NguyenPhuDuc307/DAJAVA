@@ -27,12 +27,41 @@ public class Thanhtoan extends HttpServlet {
         int MALOAIPHONG = Integer.valueOf(request.getParameter("maloaiphong"));
         int idkh = Integer.valueOf(request.getParameter("idkh"));
         int IDDATPHONG = Integer.valueOf(request.getParameter("idDP"));
+        String email = request.getParameter("email");
+        String hoten = request.getParameter("hoten");
+        String dienthoai = request.getParameter("dienthoai");
+        String loaiphong = request.getParameter("loaiphong");
+        String tenkhachsan = request.getParameter("tenkhachsan");
         int SONGUOIO = Integer.valueOf(request.getParameter("songuoi"));
         String gdDateTime = request.getParameter("ngayden");
         String gtDateTime = request.getParameter("ngaydi");
         int thanhtien = Integer.valueOf(request.getParameter("thanhtien"));
 
         dao.DatphongCT(MALOAIPHONG, IDDATPHONG, SONGUOIO, gdDateTime, gtDateTime, thanhtien);
+
+        String tieude = "Chuc mung! Ban da dat phong thanh cong";
+        String message = "<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3\" crossorigin=\"anonymous\">\n"
+                + "    </head>\n"
+                + "    <body>\n"
+                + "        <div class=\"container\">\n"
+                + "            <h3>Chúc mừng bạn đã đặt phòng thành công tại <b style=\"color:blue\">VN</b><b style=\"color:orange\">BOOKING</b></h3>\n"
+                + "            <div>Thông tin đặt phòng của bạn:</div>\n"
+                + "            <div>Họ tên : " + hoten + "</div>\n"
+                + "            <div>Số điện thoại : " + dienthoai + "</div>\n"
+                + "            <div>Khách sạn : " + tenkhachsan + "</div>\n"
+                + "            <div>Loại phòng : " + loaiphong + "</div>\n"
+                + "            <div>Số người ở : " + SONGUOIO + "</div>\n"
+                + "            <div>Giờ nhận phòng : " + gdDateTime + "</div>\n"
+                + "            <div>Giờ trả phòng : " + gtDateTime + "</div>\n"
+                + "            <div>Thành tiền : " + thanhtien +  "VND</div>\n"
+                + "            <h3>Cảm ơn bạn đã đặt phòng!</h3>\n"
+                + "        </div>\n"
+                + "    </body>\n"
+                + "</html>";
+        SeenMail.send(email, tieude, message, "nguyenphuduc62001@gmail.com", "Phuduc@30072001");
+
         List<enQuanlyDP> listDP = dao.getDatPhongChuaTT(idkh);
 
         HttpSession session = request.getSession();

@@ -62,12 +62,13 @@ public class objKhachSan {
         return null;
     }
 
-    public void editKhachSan(String TENKHACHSAN, String DIACHI, String GGMAP, String HINHANH, int HANG, boolean NGUNG, String MAKHACHSAN) {
+    public void editKhachSan(String TENKHACHSAN, String DIACHI, String GGMAP, String HINHANH, String MOTA,int HANG, boolean NGUNG, String MAKHACHSAN) {
         String query = "update tb_KHACHSAN\n"
                 + "set TENKHACHSAN = ?,\n"
                 + "DIACHI = ?,\n"
                 + "GGMAP = ?,\n"
                 + "HINHANH = ?,\n"
+                + "MOTA = ?,\n"
                 + "HANG= ?,\n"
                 + "NGUNG= ?\n"
                 + "where MAKHACHSAN = ?";
@@ -78,18 +79,19 @@ public class objKhachSan {
             ps.setString(2, DIACHI);
             ps.setString(3, GGMAP);
             ps.setString(4, HINHANH);
-            ps.setInt(5, HANG);
-            ps.setBoolean(6, NGUNG);
-            ps.setString(7, MAKHACHSAN);
+            ps.setString(5, MOTA);
+            ps.setInt(6, HANG);
+            ps.setBoolean(7, NGUNG);
+            ps.setString(8, MAKHACHSAN);
             ps.executeUpdate();
         } catch (Exception e) {
         }
     }
 
-    public void addKhachSan(String MAKHACHSAN, String TENKHACHSAN, String DIACHI, String GGMAP, String HINHANH, int HANG, boolean NGUNG) {
+    public void addKhachSan(String MAKHACHSAN, String TENKHACHSAN, String DIACHI, String GGMAP, String HINHANH, String MOTA, int HANG, boolean NGUNG) {
         String query = "INSERT tb_KHACHSAN\n"
-                + "([MAKHACHSAN], [TENKHACHSAN], [DIACHI], [GGMAP], [HINHANH], [HANG], [NGUNG])"
-                + "VALUES (?,?,?,?,?,?,?)";
+                + "([MAKHACHSAN], [TENKHACHSAN], [DIACHI], [GGMAP], [HINHANH], [MOTA], [HANG], [NGUNG])"
+                + "VALUES (?,?,?,?,?,?,?,?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -98,8 +100,9 @@ public class objKhachSan {
             ps.setString(3, DIACHI);
             ps.setString(4, GGMAP);
             ps.setString(5, HINHANH);
-            ps.setInt(6, HANG);
-            ps.setBoolean(7, NGUNG);
+            ps.setString(6, MOTA);
+            ps.setInt(7, HANG);
+            ps.setBoolean(8, NGUNG);
             ps.executeUpdate();
         } catch (Exception e) {
         }

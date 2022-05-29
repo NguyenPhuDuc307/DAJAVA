@@ -81,14 +81,13 @@ public class objLoaiPhong {
         return null;
     }
 
-    public void editLoaiPhong(String TENLOAIPHONG, String MOTA, String HINHANH, String GIAPHONG, String SOLUONG, boolean TRANGTHAI, boolean NGUNG, String IDLOAIPHONG) {
+    public void editLoaiPhong(String TENLOAIPHONG, String MOTA, String HINHANH, String GIAPHONG, String SOLUONG, boolean NGUNG, String IDLOAIPHONG) {
         String query = "update tb_LOAIPHONG\n"
                 + "set TENLOAIPHONG = ?,\n"
                 + "MOTA = ?,\n"
                 + "HINHANH = ?,\n"
                 + "GIAPHONG = ?,\n"
                 + "SOLUONG= ?,\n"
-                + "TRANGTHAI = ?,\n"
                 + "NGUNG= ?\n"
                 + "where IDLOAIPHONG = ?";
         try {
@@ -99,9 +98,8 @@ public class objLoaiPhong {
             ps.setString(3, HINHANH);
             ps.setString(4, GIAPHONG);
             ps.setString(5, SOLUONG);
-            ps.setBoolean(6, TRANGTHAI);
-            ps.setBoolean(7, NGUNG);
-            ps.setString(8, IDLOAIPHONG);
+            ps.setBoolean(6, NGUNG);
+            ps.setString(7, IDLOAIPHONG);
             ps.executeUpdate();
         } catch (Exception e) {
         }

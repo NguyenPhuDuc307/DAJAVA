@@ -107,6 +107,10 @@
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                         </svg></i>
                                 </a>
+                                <a href="detail?id=${o.MAKHACHSAN}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chi tiết"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                        </svg></i></a>
                             </td>
                         </tr>
                     </c:forEach>
@@ -116,38 +120,74 @@
 
         <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Thêm khách sạn</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="AddKhachSanControl" method="post">
+                    <form action="AddKhachSanControl" method="post" enctype="multipart/form-data">
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label>Mã khách sạn</label>
-                                <input name="MAKHACHSAN" type="text" class="form-control" required>
+                            <div class="form-floating mb-3">
+                                <input name="MAKHACHSAN" placeholder="Mã khách sạn" id="floatingTextarea1" type="text" class="form-control" required>
+                                <label for="floatingTextarea1">Mã khách sạn</label>
                             </div>
-                            <div class="form-group">
-                                <label>Tên khách sạn</label>
-                                <input name="TENKHACHSAN" type="text" class="form-control" required>
+                            <div class="form-floating mb-3">
+                                <input name="TENKHACHSAN" placeholder="Tên khách sạn" id="floatingTextarea2" type="text" class="form-control" required>
+                                <label for="floatingTextarea3">Tên khách sạn</label>
                             </div>
-                            <div class="form-group">
-                                <label>Địa chỉ</label>
-                                <textarea name="DIACHI" class="form-control" required></textarea>
+
+                            <div class="form-floating mb-3">
+                                <textarea name="MOTA" style="height: 200px" type="text" class="form-control" placeholder="Tên khách sạn" id="floatingTextarea4" required></textarea>
+                                <label for="floatingTextarea4">Mô tả về khách sạn</label>
                             </div>
-                            <div class="form-group">
-                                <label>GG Map</label>
-                                <textarea name="GGMAP" class="form-control" required></textarea>
+
+                            <div class="form-floating mb-3">
+                                <textarea name="DIACHI" placeholder="Địa chỉ" style="height: 6rem" type="text" id="floatingTextarea5" class="form-control" required></textarea>
+                                <label for="floatingTextarea5">Địa chỉ khách sạn</label>
                             </div>
-                            <div class="form-group">
-                                <label>Hình ảnh</label>
-                                <textarea name="HINHANH" class="form-control" required></textarea>
+
+                            <div class="form-floating mb-3">
+                                <textarea placeholder="Nhúng bản đồ Google Maps" style="height: 6rem" id="floatingTextarea6" name="GGMAP" class="form-control" required></textarea>
+                                <label for="floatingTextarea6">Nhúng bản đồ Google Maps</label>
                             </div>
-                            <div class="form-group">
-                                <label>Hạng</label>
-                                <input name="HANG" type="text" class="form-control" required>
+
+                            <div class="input-group mb-3">
+                                <input style="height: 4rem" placeholder="Hình ảnh" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" type="file" class="form-control" id="image" name="image" accept="image/*" onchange="ImagesFileAsURL()"/>
+                                <label style="height: 4rem" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" class="input-group-text" for="image">Hình ảnh khách sạn</label>
                             </div>
+
+                            <div id="displayImg">
+                            </div>
+                            <script type="text/javascript">
+                                function ImagesFileAsURL() {
+                                    var fileSelected = document.getElementById('image').files;
+                                    if (fileSelected.length > 0) {
+                                        var fileToLoad = fileSelected[0];
+                                        var fileReader = new FileReader();
+                                        fileReader.onload = function (fileLoaderEvent) {
+                                            var srcData = fileLoaderEvent.target.result;
+                                            var newImage = document.createElement('img');
+                                            newImage.src = srcData;
+                                            document.getElementById('displayImg').innerHTML = newImage.outerHTML;
+                                        }
+                                        fileReader.readAsDataURL(fileToLoad);
+                                    }
+                                }
+                            </script>
+
+                            <div class="form-floating mb-3">
+                                <select style="height: 4rem" class="form-select" id="inputGroupSelect01" name="HANG" required>
+                                    <option selected>Chọn tiêu chuẩn</option>
+                                    <option value="1">1 sao</option>
+                                    <option value="2">2 sao</option>
+                                    <option value="3">3 sao</option>
+                                    <option value="4">4 sao</option>
+                                    <option value="5">5 sao</option>
+                                </select>
+                                <label for="inputGroupSelect01">Tiêu chuẩn khách sạn (TCVN 4391: 2009)</label>
+                            </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>

@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.Normalizer;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +33,42 @@ public class DAO {
     public List<Khachsan> getAllKhachsan() {
         List<Khachsan> list = new ArrayList<>();
         String query = "select top 8* from tb_Khachsan order by TENKHACHSAN desc";
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Khachsan(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7),
+                        rs.getBoolean(8)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
+
+    public void deleteDP(String IDDPCT) {
+        String query = "delete from tb_DATPHONGCHITIET where IDDPCT = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, IDDPCT);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public List<Khachsan> getAllKhachsans() {
+        List<Khachsan> list = new ArrayList<>();
+        String query = "select * from tb_Khachsan order by TENKHACHSAN desc";
 
         try {
             conn = new DBContext().getConnection();
@@ -219,15 +254,15 @@ public class DAO {
 
     public List<enQuanlyDP> getQuanlyDP(String MAKS) {
         List<enQuanlyDP> list = new ArrayList<>();
-        String query = "SELECT dbo.tb_DATPHONG.GHICHU, dbo.tb_DATPHONG.TRANGTHAI, dbo.tb_DATPHONGCHITIET.SONGUOIO, dbo.tb_DATPHONGCHITIET.GIODAT, \n"
-                + "                  dbo.tb_DATPHONGCHITIET.GIOTRA, dbo.tb_DATPHONGCHITIET.THANHTIEN, dbo.tb_KHACHHANG.HOTEN, dbo.tb_KHACHHANG.DIENTHOAI, \n"
-                + "                  dbo.tb_LOAIPHONG.TENLOAIPHONG, dbo.tb_LOAIPHONG.GIAPHONG, dbo.tb_DATPHONG.IDDATPHONG, dbo.tb_DATPHONGCHITIET.IDDPCT, "
-                + "                   dbo.tb_KHACHSAN.TENKHACHSAN\n"
+        String query = "SELECT dbo.tb_DATPHONG.GHICHU, dbo.tb_DATPHONG.TRANGTHAI, dbo.tb_DATPHONGCHITIET.SONGUOIO, dbo.tb_DATPHONGCHITIET.GIODAT,\n"
+                + "dbo.tb_DATPHONGCHITIET.GIOTRA, dbo.tb_DATPHONGCHITIET.THANHTIEN, dbo.tb_KHACHHANG.HOTEN, dbo.tb_KHACHHANG.DIENTHOAI,\n"
+                + "dbo.tb_LOAIPHONG.TENLOAIPHONG, dbo.tb_LOAIPHONG.GIAPHONG, dbo.tb_DATPHONG.IDDATPHONG, dbo.tb_DATPHONGCHITIET.IDDPCT,\n"
+                + "dbo.tb_KHACHSAN.TENKHACHSAN, dbo.tb_KHACHHANG.EMAIL\n"
                 + "FROM     dbo.tb_DATPHONG INNER JOIN\n"
-                + "                  dbo.tb_DATPHONGCHITIET ON dbo.tb_DATPHONG.IDDATPHONG = dbo.tb_DATPHONGCHITIET.IDDATPHONG INNER JOIN\n"
-                + "                  dbo.tb_KHACHHANG ON dbo.tb_DATPHONG.IDKHACHHANG = dbo.tb_KHACHHANG.IDKHACHHANG INNER JOIN\n"
-                + "                  dbo.tb_LOAIPHONG ON dbo.tb_DATPHONGCHITIET.MALOAIPHONG = dbo.tb_LOAIPHONG.IDLOAIPHONG INNER JOIN\n"
-                + "                  dbo.tb_KHACHSAN ON dbo.tb_LOAIPHONG.MAKHACHSAN = dbo.tb_KHACHSAN.MAKHACHSAN\n"
+                + "dbo.tb_DATPHONGCHITIET ON dbo.tb_DATPHONG.IDDATPHONG = dbo.tb_DATPHONGCHITIET.IDDATPHONG INNER JOIN\n"
+                + "dbo.tb_KHACHHANG ON dbo.tb_DATPHONG.IDKHACHHANG = dbo.tb_KHACHHANG.IDKHACHHANG INNER JOIN\n"
+                + "dbo.tb_LOAIPHONG ON dbo.tb_DATPHONGCHITIET.MALOAIPHONG = dbo.tb_LOAIPHONG.IDLOAIPHONG INNER JOIN\n"
+                + "dbo.tb_KHACHSAN ON dbo.tb_LOAIPHONG.MAKHACHSAN = dbo.tb_KHACHSAN.MAKHACHSAN\n"
                 + "WHERE dbo.tb_KHACHSAN.MAKHACHSAN = ? ORDER BY dbo.tb_DATPHONGCHITIET.GIODAT desc";
 
         try {
@@ -245,18 +280,18 @@ public class DAO {
 
                 Date ngaydat = rs.getTimestamp(4);
                 Date ngaytra = rs.getTimestamp(5);
-                
+
                 Calendar calendar = GregorianCalendar.getInstance();
                 calendar.setTime(ngaydat);
                 long differenceGio = LocalDateTime.now().getHour() - calendar.get(Calendar.HOUR_OF_DAY);
                 long differenceNgay = (ngaydat.getTime() - dNow.getTime()) / 3600000;
                 long difference = Math.abs(differenceNgay + differenceGio);
-                
+
                 Calendar calendar1 = GregorianCalendar.getInstance();
                 calendar.setTime(ngaytra);
                 long differenceGio1 = LocalDateTime.now().getHour() - calendar1.get(Calendar.HOUR_OF_DAY);
                 long differenceNgay1 = (ngaytra.getTime() - dNow.getTime()) / 3600000;
-                long giooqua = (differenceNgay1 + differenceGio1)*(-1);
+                long giooqua = (differenceNgay1 + differenceGio1) * (-1);
 
                 thanhtien = (int) ((int) (rs.getInt(10) + (rs.getInt(10) * (rs.getInt(3) - 1) * 0.7)) * difference / 24);
                 if (thanhtien < rs.getInt(10)) {
@@ -276,10 +311,12 @@ public class DAO {
                         rs.getInt(10),
                         rs.getInt(11),
                         rs.getInt(12),
-                        rs.getString(13), 
+                        rs.getString(13),
                         (int) difference,
                         thanhtien,
-                        (int) giooqua));
+                        (int) giooqua,
+                        rs.getString(14)
+                ));
             }
         } catch (Exception e) {
         }
@@ -291,7 +328,7 @@ public class DAO {
         String query = "SELECT dbo.tb_DATPHONG.GHICHU, dbo.tb_DATPHONG.TRANGTHAI, dbo.tb_DATPHONGCHITIET.SONGUOIO, dbo.tb_DATPHONGCHITIET.GIODAT,\n"
                 + "dbo.tb_DATPHONGCHITIET.GIOTRA, dbo.tb_DATPHONGCHITIET.THANHTIEN, dbo.tb_KHACHHANG.HOTEN, dbo.tb_KHACHHANG.DIENTHOAI,\n"
                 + "dbo.tb_LOAIPHONG.TENLOAIPHONG, dbo.tb_LOAIPHONG.GIAPHONG, dbo.tb_DATPHONG.IDDATPHONG, dbo.tb_DATPHONGCHITIET.IDDPCT,\n"
-                + "dbo.tb_KHACHSAN.TENKHACHSAN\n"
+                + "dbo.tb_KHACHSAN.TENKHACHSAN, dbo.tb_KHACHHANG.EMAIL\n"
                 + "FROM     dbo.tb_DATPHONG INNER JOIN\n"
                 + "dbo.tb_DATPHONGCHITIET ON dbo.tb_DATPHONG.IDDATPHONG = dbo.tb_DATPHONGCHITIET.IDDATPHONG INNER JOIN\n"
                 + "dbo.tb_KHACHHANG ON dbo.tb_DATPHONG.IDKHACHHANG = dbo.tb_KHACHHANG.IDKHACHHANG INNER JOIN\n"
@@ -320,12 +357,12 @@ public class DAO {
                 long differenceGio = LocalDateTime.now().getHour() - calendar.get(Calendar.HOUR_OF_DAY);
                 long differenceNgay = (ngaydat.getTime() - dNow.getTime()) / 3600000;
                 long difference = Math.abs(differenceNgay + differenceGio);
-                
+
                 Calendar calendar1 = GregorianCalendar.getInstance();
                 calendar.setTime(ngaytra);
                 long differenceGio1 = LocalDateTime.now().getHour() - calendar1.get(Calendar.HOUR_OF_DAY);
                 long differenceNgay1 = (ngaytra.getTime() - dNow.getTime()) / 3600000;
-                long giooqua = (differenceNgay1 + differenceGio1)*(-1);
+                long giooqua = (differenceNgay1 + differenceGio1) * (-1);
 
                 thanhtien = (int) ((int) (rs.getInt(10) + (rs.getInt(10) * (rs.getInt(3) - 1) * 0.7)) * difference / 24);
                 if (thanhtien < rs.getInt(10)) {
@@ -345,10 +382,11 @@ public class DAO {
                         rs.getInt(10),
                         rs.getInt(11),
                         rs.getInt(12),
-                        rs.getString(13), 
+                        rs.getString(13),
                         (int) difference,
                         thanhtien,
-                        (int) giooqua
+                        (int) giooqua,
+                        rs.getString(14)
                 ));
             }
         } catch (Exception e) {
@@ -361,7 +399,7 @@ public class DAO {
         String query = "SELECT dbo.tb_DATPHONG.GHICHU, dbo.tb_DATPHONG.TRANGTHAI, dbo.tb_DATPHONGCHITIET.SONGUOIO, dbo.tb_DATPHONGCHITIET.GIODAT,\n"
                 + "dbo.tb_DATPHONGCHITIET.GIOTRA, dbo.tb_DATPHONGCHITIET.THANHTIEN, dbo.tb_KHACHHANG.HOTEN, dbo.tb_KHACHHANG.DIENTHOAI,\n"
                 + "dbo.tb_LOAIPHONG.TENLOAIPHONG, dbo.tb_LOAIPHONG.GIAPHONG, dbo.tb_DATPHONG.IDDATPHONG, dbo.tb_DATPHONGCHITIET.IDDPCT,\n"
-                + "dbo.tb_KHACHSAN.TENKHACHSAN\n"
+                + "dbo.tb_KHACHSAN.TENKHACHSAN, dbo.tb_KHACHHANG.EMAIL\n"
                 + "FROM     dbo.tb_DATPHONG INNER JOIN\n"
                 + "dbo.tb_DATPHONGCHITIET ON dbo.tb_DATPHONG.IDDATPHONG = dbo.tb_DATPHONGCHITIET.IDDATPHONG INNER JOIN\n"
                 + "dbo.tb_KHACHHANG ON dbo.tb_DATPHONG.IDKHACHHANG = dbo.tb_KHACHHANG.IDKHACHHANG INNER JOIN\n"
@@ -385,7 +423,7 @@ public class DAO {
 
                 Date ngaydat = rs.getTimestamp(4);
                 Date ngaytra = rs.getTimestamp(5);
-                
+
                 Calendar calendar = GregorianCalendar.getInstance();
                 calendar.setTime(ngaydat);
                 long differenceGio = LocalDateTime.now().getHour() - calendar.get(Calendar.HOUR_OF_DAY);
@@ -396,8 +434,8 @@ public class DAO {
                 calendar.setTime(ngaytra);
                 long differenceGio1 = LocalDateTime.now().getHour() - calendar1.get(Calendar.HOUR_OF_DAY);
                 long differenceNgay1 = (ngaytra.getTime() - dNow.getTime()) / 3600000;
-                long giooqua = (differenceNgay1 + differenceGio1)*(-1);
-                
+                long giooqua = (differenceNgay1 + differenceGio1) * (-1);
+
                 thanhtien = (int) ((int) (rs.getInt(10) + (rs.getInt(10) * (rs.getInt(3) - 1) * 0.7)) * difference / 24);
                 if (thanhtien < rs.getInt(10)) {
                     thanhtien = (int) (rs.getInt(10) * 1);
@@ -416,10 +454,11 @@ public class DAO {
                         rs.getInt(10),
                         rs.getInt(11),
                         rs.getInt(12),
-                        rs.getString(13), 
+                        rs.getString(13),
                         (int) difference,
                         thanhtien,
-                        (int) giooqua
+                        (int) giooqua,
+                        rs.getString(14)
                 ));
             }
         } catch (Exception e) {
@@ -432,7 +471,7 @@ public class DAO {
         String query = "SELECT dbo.tb_DATPHONG.GHICHU, dbo.tb_DATPHONG.TRANGTHAI, dbo.tb_DATPHONGCHITIET.SONGUOIO, dbo.tb_DATPHONGCHITIET.GIODAT,\n"
                 + "dbo.tb_DATPHONGCHITIET.GIOTRA, dbo.tb_DATPHONGCHITIET.THANHTIEN, dbo.tb_KHACHHANG.HOTEN, dbo.tb_KHACHHANG.DIENTHOAI,\n"
                 + "dbo.tb_LOAIPHONG.TENLOAIPHONG, dbo.tb_LOAIPHONG.GIAPHONG, dbo.tb_DATPHONG.IDDATPHONG, dbo.tb_DATPHONGCHITIET.IDDPCT,\n"
-                + "dbo.tb_KHACHSAN.TENKHACHSAN\n"
+                + "dbo.tb_KHACHSAN.TENKHACHSAN, dbo.tb_KHACHHANG.EMAIL\n"
                 + "FROM     dbo.tb_DATPHONG INNER JOIN\n"
                 + "dbo.tb_DATPHONGCHITIET ON dbo.tb_DATPHONG.IDDATPHONG = dbo.tb_DATPHONGCHITIET.IDDATPHONG INNER JOIN\n"
                 + "dbo.tb_KHACHHANG ON dbo.tb_DATPHONG.IDKHACHHANG = dbo.tb_KHACHHANG.IDKHACHHANG INNER JOIN\n"
@@ -468,8 +507,8 @@ public class DAO {
                 calendar.setTime(ngaytra);
                 long differenceGio1 = LocalDateTime.now().getHour() - calendar1.get(Calendar.HOUR_OF_DAY);
                 long differenceNgay1 = (ngaytra.getTime() - dNow.getTime()) / 3600000;
-                long giooqua = (differenceNgay1 + differenceGio1)*(-1);
-                
+                long giooqua = (differenceNgay1 + differenceGio1) * (-1);
+
                 thanhtien = (int) ((int) (rs.getInt(10) + (rs.getInt(10) * (rs.getInt(3) - 1) * 0.7)) * difference / 24);
                 if (thanhtien < rs.getInt(10)) {
                     thanhtien = (int) (rs.getInt(10) * 1);
@@ -488,10 +527,11 @@ public class DAO {
                         rs.getInt(10),
                         rs.getInt(11),
                         rs.getInt(12),
-                        rs.getString(13), 
+                        rs.getString(13),
                         (int) difference,
                         thanhtien,
-                        (int) giooqua
+                        (int) giooqua,
+                        rs.getString(14)
                 ));
             }
         } catch (Exception e) {
@@ -504,7 +544,7 @@ public class DAO {
         String query = "SELECT dbo.tb_DATPHONG.GHICHU, dbo.tb_DATPHONG.TRANGTHAI, dbo.tb_DATPHONGCHITIET.SONGUOIO, dbo.tb_DATPHONGCHITIET.GIODAT, \n"
                 + "                  dbo.tb_DATPHONGCHITIET.GIOTRA, dbo.tb_DATPHONGCHITIET.THANHTIEN, dbo.tb_KHACHHANG.HOTEN, dbo.tb_KHACHHANG.DIENTHOAI, \n"
                 + "                  dbo.tb_LOAIPHONG.TENLOAIPHONG, dbo.tb_LOAIPHONG.GIAPHONG, dbo.tb_DATPHONG.IDDATPHONG, dbo.tb_DATPHONGCHITIET.IDDPCT, "
-                + "                   dbo.tb_KHACHSAN.TENKHACHSAN\n"
+                + "                   dbo.tb_KHACHSAN.TENKHACHSAN, dbo.tb_KHACHHANG.EMAIL\n"
                 + "FROM     dbo.tb_DATPHONG INNER JOIN\n"
                 + "                  dbo.tb_DATPHONGCHITIET ON dbo.tb_DATPHONG.IDDATPHONG = dbo.tb_DATPHONGCHITIET.IDDATPHONG INNER JOIN\n"
                 + "                  dbo.tb_KHACHHANG ON dbo.tb_DATPHONG.IDKHACHHANG = dbo.tb_KHACHHANG.IDKHACHHANG INNER JOIN\n"
@@ -535,7 +575,8 @@ public class DAO {
                         rs.getString(13),
                         0,
                         0,
-                        0
+                        0,
+                        rs.getString(14)
                 ));
             }
         } catch (Exception e) {
@@ -548,7 +589,7 @@ public class DAO {
         String query = "SELECT dbo.tb_DATPHONG.GHICHU, dbo.tb_DATPHONG.TRANGTHAI, dbo.tb_DATPHONGCHITIET.SONGUOIO, dbo.tb_DATPHONGCHITIET.GIODAT, \n"
                 + "                  dbo.tb_DATPHONGCHITIET.GIOTRA, dbo.tb_DATPHONGCHITIET.THANHTIEN, dbo.tb_KHACHHANG.HOTEN, dbo.tb_KHACHHANG.DIENTHOAI, \n"
                 + "                  dbo.tb_LOAIPHONG.TENLOAIPHONG, dbo.tb_LOAIPHONG.GIAPHONG, dbo.tb_DATPHONG.IDDATPHONG, dbo.tb_DATPHONGCHITIET.IDDPCT, "
-                + "                   dbo.tb_KHACHSAN.TENKHACHSAN\n"
+                + "                   dbo.tb_KHACHSAN.TENKHACHSAN, dbo.tb_KHACHHANG.EMAIL\n"
                 + "FROM     dbo.tb_DATPHONG INNER JOIN\n"
                 + "                  dbo.tb_DATPHONGCHITIET ON dbo.tb_DATPHONG.IDDATPHONG = dbo.tb_DATPHONGCHITIET.IDDATPHONG INNER JOIN\n"
                 + "                  dbo.tb_KHACHHANG ON dbo.tb_DATPHONG.IDKHACHHANG = dbo.tb_KHACHHANG.IDKHACHHANG INNER JOIN\n"
@@ -579,7 +620,8 @@ public class DAO {
                         rs.getString(13),
                         0,
                         0,
-                        0
+                        0,
+                        rs.getString(14)
                 ));
             }
         } catch (Exception e) {
@@ -592,7 +634,7 @@ public class DAO {
         String query = "SELECT dbo.tb_DATPHONG.GHICHU, dbo.tb_DATPHONG.TRANGTHAI, dbo.tb_DATPHONGCHITIET.SONGUOIO, dbo.tb_DATPHONGCHITIET.GIODAT, \n"
                 + "                  dbo.tb_DATPHONGCHITIET.GIOTRA, dbo.tb_DATPHONGCHITIET.THANHTIEN, dbo.tb_KHACHHANG.HOTEN, dbo.tb_KHACHHANG.DIENTHOAI, \n"
                 + "                  dbo.tb_LOAIPHONG.TENLOAIPHONG, dbo.tb_LOAIPHONG.GIAPHONG, dbo.tb_DATPHONG.IDDATPHONG, dbo.tb_DATPHONGCHITIET.IDDPCT, "
-                + "                   dbo.tb_KHACHSAN.TENKHACHSAN\n"
+                + "                   dbo.tb_KHACHSAN.TENKHACHSAN, dbo.tb_KHACHHANG.EMAIL\n"
                 + "FROM     dbo.tb_DATPHONG INNER JOIN\n"
                 + "                  dbo.tb_DATPHONGCHITIET ON dbo.tb_DATPHONG.IDDATPHONG = dbo.tb_DATPHONGCHITIET.IDDATPHONG INNER JOIN\n"
                 + "                  dbo.tb_KHACHHANG ON dbo.tb_DATPHONG.IDKHACHHANG = dbo.tb_KHACHHANG.IDKHACHHANG INNER JOIN\n"
@@ -623,7 +665,8 @@ public class DAO {
                         rs.getString(13),
                         0,
                         0,
-                        0
+                        0,
+                        rs.getString(14)
                 ));
             }
         } catch (Exception e) {
@@ -933,6 +976,30 @@ public class DAO {
         return null;
     }
 
+    public Account LoginADid(String id, String password) {
+        String query = "select * from tb_TAIKHOAN\n"
+                + "where IDTAIKHOAN = ?\n"
+                + "and PASSWORD = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Account(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
     public Khachhang LoginKH(String email, String password) {
         String query = "select * from tb_KHACHHANG	\n"
                 + "where EMAIL = ? \n"
@@ -941,6 +1008,30 @@ public class DAO {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Khachhang(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getBoolean(7));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public Khachhang LoginKHid(String id, String password) {
+        String query = "select * from tb_KHACHHANG\n"
+                + "where IDKHACHHANG = ? \n"
+                + "and PASSWORD = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
             ps.setString(2, password);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -1080,8 +1171,8 @@ public class DAO {
 
     public static void main(String[] args) {
         DAO dao = new DAO();
-        List<Khachsan> list = dao.getAllKhachsanPage(1);
-        for (Khachsan k : list) {
+        List<enQuanlyDP> list = dao.getQuanlyDP("KS1");
+        for (enQuanlyDP k : list) {
             System.out.println(k);
         }
     }

@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
         <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
         <title>VNBooking | Phòng ở</title>
         <link rel="icon" href="images/logo.svg" type="image/x-icon">
 
@@ -32,41 +33,61 @@
             <hr/>
             <!-- Modal -->
             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};">
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Thêm loại phòng</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="AddLoaiPhongControl" method="post">
+                        <form action="AddLoaiPhongControl" method="post" enctype="multipart/form-data">
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Tên loại phòng</label>
-                                    <input style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" name="TENLOAIPHONG" type="text" class="form-control" required>
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" placeholder="Loại phòng" id="floatingTextarea1" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" name="TENLOAIPHONG" required>
+                                    <label for="floatingTextarea1">Loại phòng</label>
                                 </div>
-                                <div class="form-group">
-                                    <label>Mô tả</label>
-                                    <input style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" name="MOTA" type="text" class="form-control" required>
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" placeholder="Hãy viết mô tả" id="floatingTextarea2" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau}; height: 200px" name="MOTA"></textarea>
+                                    <label for="floatingTextarea2">Mô tả</label>
                                 </div>
-                                <div class="form-group">
-                                    <label>Hình ảnh</label>
-                                    <textarea style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" name="HINHANH" class="form-control" required></textarea>
+                                <div class="input-group mb-3">
+                                    <input placeholder="Hình ảnh" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau}; height: 4rem" type="file" class="form-control" id="image" name="image" accept="image/*" onchange="ImagesFileAsURL()"/>
+                                    <label style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau}; ; height: 4rem" class="input-group-text" for="image">Hình ảnh phòng ở</label>
                                 </div>
-                                <div class="form-group">
-                                    <label>Giá</label>
-                                    <textarea style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" name="GIAPHONG" class="form-control" required></textarea>
+
+                                <div id="displayImg">
                                 </div>
-                                <div class="form-group">
-                                    <label>Số lượng</label>
-                                    <textarea style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" name="SOLUONG" class="form-control" required></textarea>
+                                <script type="text/javascript">
+                                    function ImagesFileAsURL() {
+                                        var fileSelected = document.getElementById('image').files;
+                                        if (fileSelected.length > 0) {
+                                            var fileToLoad = fileSelected[0];
+                                            var fileReader = new FileReader();
+                                            fileReader.onload = function (fileLoaderEvent) {
+                                                var srcData = fileLoaderEvent.target.result;
+                                                var newImage = document.createElement('img');
+                                                newImage.src = srcData;
+                                                document.getElementById('displayImg').innerHTML = newImage.outerHTML;
+                                            }
+                                            fileReader.readAsDataURL(fileToLoad);
+                                        }
+                                    }
+                                </script>
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" placeholder="Giá" id="floatingTextarea3" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" name="GIAPHONG" required>
+                                    <label for="floatingTextarea3">Giá</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" placeholder="Số lượng phòng" id="floatingTextarea4" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" name="SOLUONG" required>
+                                    <label for="floatingTextarea4">Số lượng phòng</label>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
                                 <button type="submit" class="btn btn-primary">Đồng ý</button>
                             </div>
+
+                        </form>
                     </div>
-                    </form>
                 </div>
             </div>
             <table style="margin-bottom:5rem; color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" class="table table-bordered">
@@ -108,8 +129,11 @@
                                 <a href="loadLoaiPhongControl?IDLP=${o.IDLOAIPHONG}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Sửa"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                        </svg></i>
-                                </a>
+                                        </svg></i></a>
+                                <a href="datphong?id=${o.IDLOAIPHONG}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chi tiết"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                        </svg></i></a>
                             </td>
 
                         </tr>
@@ -118,6 +142,7 @@
             </table>
         </div>
         <jsp:include page="Footer.jsp"></jsp:include>
+
         <!-- JavaScript Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 

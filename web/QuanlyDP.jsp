@@ -28,6 +28,7 @@
         <div class="container" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};">
             <h4>Quản lý <b>Đặt phòng</b></h4>
 
+
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Tất cả</button>
@@ -38,10 +39,22 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                    <c:set var="total" value="${0}"/>
+                    <c:forEach items="${listDP}" var="o">
+                        <c:set var="total" value="${total + o.THANHTIEN}" />
+
+
+
+                    </c:forEach>
+                    <br/>
+                    Tổng đơn đặt phòng: ${listDPsum}
+                    <h5 style="">Tổng tiền: <fmt:formatNumber type = "number" maxFractionDigits = "3" value = "${total}" />₫</h5>
+                    <br/>
                     <table class="table table-bordered">
                         <thead style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};">
                             <tr>
                                 <th>STT</th>
+                                <th>Hủy</th>
                                 <th>Trạng thái</th>
                                 <th>Loại phòng</th>
                                 <th>Khách hàng</th>
@@ -59,13 +72,46 @@
                                     <td>
                                         ${loop.count}
                                     </td>
+
                                     <c:choose>
                                         <c:when test="${o.TRANGTHAI}">
                                             <td style="color:green">
+                                            </td>
+                                            <td style="color:green">
                                                 Ðã thanh toán
                                             </td>
+
                                         </c:when>
                                         <c:otherwise>
+                                            <td>
+                                                <a style="color:red; text-decoration: none" href="" data-bs-toggle="modal" data-bs-target="#aaa${o.IDDPCT}">
+                                                    Hủy đơn
+                                                </a>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="aaa${o.IDDPCT}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Bạn có chắc chắn muốn hủy đơn đặt phòng này?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form action="HuyDon" method="post">
+                                                                    <input value="${o.IDDPCT}" name="madon" hidden>
+                                                                    <input value="${o.EMAIL}" name="email" hidden>
+                                                                    <input value="${o.GIODAT}" name="gd" hidden>
+                                                                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </td>
+
                                             <td>
                                                 <a style="color:red; text-decoration: none" href="" data-bs-toggle="modal" data-bs-target="#a${o.IDDPCT}">
                                                     Nhấn để thanh toán
@@ -129,7 +175,7 @@
                                                                             <div><h6 style="color:red"><fmt:formatNumber type = "number" maxFractionDigits = "3" value = "${o.THANHTIENHT}" />₫</h6></div>
                                                                         </div>
                                                                     </div>
-                                                                        <i>Hóa đơn đã bao gồm thuế VAT 10%</i>
+                                                                    <i>Hóa đơn đã bao gồm thuế VAT 10%</i>
                                                                 </div>
                                                                 <div style="font-size: 1px; display: flex">
                                                                     <input type="text" value="${o.IDDATPHONG}" name="iddatphong" style="visibility: hidden">
@@ -179,6 +225,19 @@
                     </table>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+
+                    <c:set var="totalhn" value="${0}"/>
+                    <c:forEach items="${listDPHN}" var="o">
+                        <c:set var="totalhn" value="${totalhn + o.THANHTIEN}" />
+
+
+
+                    </c:forEach>
+                    <br/>
+                    Tổng đơn đặt phòng: ${listDPsumhn}
+                    <h5 style="">Tổng tiền: <fmt:formatNumber type = "number" maxFractionDigits = "3" value = "${totalhn}" />₫</h5>
+                    <br/>
+
                     <table class="table table-bordered">
                         <thead style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};">
                             <tr>
@@ -271,7 +330,21 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0"><table class="table table-bordered">
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+                    
+                    <c:set var="totaltuan" value="${0}"/>
+                    <c:forEach items="${listDPTUAN}" var="o">
+                        <c:set var="totaltuan" value="${totaltuan + o.THANHTIEN}" />
+
+
+
+                    </c:forEach>
+                    <br/>
+                    Tổng đơn đặt phòng: ${listDPsumtuan}
+                    <h5 style="">Tổng tiền: <fmt:formatNumber type = "number" maxFractionDigits = "3" value = "${totaltuan}" />₫</h5>
+                    <br/>
+                    
+                    <table class="table table-bordered">
                         <thead style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};">
                             <tr>
                                 <th>STT</th>
@@ -364,6 +437,19 @@
                         </tbody>
                     </table></div>
                 <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">
+                    
+                    <c:set var="totalthang" value="${0}"/>
+                    <c:forEach items="${listDPTHANG}" var="o">
+                        <c:set var="totalthang" value="${totalthang + o.THANHTIEN}" />
+
+
+
+                    </c:forEach>
+                    <br/>
+                    Tổng đơn đặt phòng: ${listDPsumthang}
+                    <h5 style="">Tổng tiền: <fmt:formatNumber type = "number" maxFractionDigits = "3" value = "${totalthang}" />₫</h5>
+                    <br/>
+                    
                     <table class="table table-bordered">
                         <thead style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};">
                             <tr>

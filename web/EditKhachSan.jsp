@@ -24,54 +24,136 @@
         <jsp:include page="Header.jsp"></jsp:include>
             <div class="container">
                 <h2>Quản lý <b>Khách sạn</b></h2>
-                <div>
-                    <form action="EditKhachSanControl" method="post">
-                        <div class="modal-header">
-                            <h4>Thông tin khách sạn</h4>
-                            <a class="navbar-brand" href="KhachSanControl"> <button type="button" class="btn-close" aria-label="Close"></button></a>
-                        </div>
-                        <div class="">
-                            <div class="form-group">
-                                <label>Mã khách sạn</label>
-                                <input value="${detailKS.MAKHACHSAN}" name="maks" type="text" class="form-control" readonly required>
-                        </div>
-                        <div class="form-group">
-                            <label>Tên khách sạn</label>
-                            <textarea name="tenkhachsan" class="form-control" required>${detailKS.TENKHACHSAN}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Địa chỉ</label>
-                            <textarea name="diachi" class="form-control" required>${detailKS.DIACHI}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>GG Map</label>
-                            <input value="${detailKS.GGMAP}" name="ggmap" type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Hình ảnh</label>
-                            <input value="${detailKS.HINHANH}" name="hinh" type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Hạng</label>
-                            <input value="${detailKS.HANG}" name="hang" type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Ngừng: </label>
-                            <c:choose>
-                                <c:when test="${detailLKS.NGUNG==true}">
-                                    <input name="ngung" type="checkbox" value="true" checked>
-                                </c:when>    
-                                <c:otherwise>
-                                    <input name="ngung" type="checkbox" value="true">
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                    </div>
-                    <div style="margin-top: 1rem">
-                        <input type="submit" class="btn btn-success" value="Lưu thay đổi">
-                    </div>
-                </form>
-            </div>
+                
+                <form action="EditKhachSanControl" method="post" enctype="multipart/form-data">
+                    <input name="maks"value="${detailKS.MAKHACHSAN}" hidden>
+                <input name="ha"value="${detailKS.HINHANH}" hidden>
+                <div class="form-floating mb-3">
+                    <input name="tenkhachsan" id="a1" placeholder="Tên khách sạn" class="form-control" value="${detailKS.TENKHACHSAN}" required>
+                    <label for="a1">Tên khách sạn</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <textarea style="height: 10rem" id="a0" placeholder="Mô tả" name="mota" class="form-control" required>${detailKS.MOTA}</textarea>
+                    <label for="a0">Mô tả</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <textarea id="addressinput" placeholder="Địa chỉ khách sạn" name="diachi" class="form-control" required>${detailKS.DIACHI}</textarea>
+                    <label for="addressinput">Địa chỉ khách sạn</label>
+                </div>
+
+
+                <div class="form-floating mb-3">
+                    <textarea style="height: 7rem" id="a3" placeholder="Nhúng bản đồ Google Maps" name="ggmap" class="form-control" required>${detailKS.GGMAP}</textarea>
+                    <label for="a3">Nhúng bản đồ Google Maps</label>
+                </div>
+
+                <div class="input-group mb-3">
+                    <input style="height: 4rem" value="${detailKS.HINHANH}" placeholder="Hình ảnh" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" type="file" class="form-control" id="image" name="image" accept="image/*" onchange="ImagesFileAsURL()"/>
+                    <label style="height: 4rem" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" class="input-group-text" for="image">Hình ảnh khách sạn</label>
+                </div>
+
+                <div id="displayImg">
+                </div>
+                <script type="text/javascript">
+                    function ImagesFileAsURL() {
+                        var fileSelected = document.getElementById('image').files;
+                        if (fileSelected.length > 0) {
+                            var fileToLoad = fileSelected[0];
+                            var fileReader = new FileReader();
+                            fileReader.onload = function (fileLoaderEvent) {
+                                var srcData = fileLoaderEvent.target.result;
+                                var newImage = document.createElement('img');
+                                newImage.src = srcData;
+                                document.getElementById('displayImg').innerHTML = newImage.outerHTML;
+                            }
+                            fileReader.readAsDataURL(fileToLoad);
+                        }
+                    }
+                </script>
+
+                <div class="form-floating mb-3">
+                    <select style="height: 4rem" class="form-select" id="inputGroupSelect01" name="hang" required>
+                        <option selected>Tiêu chuẩn khách sạn (TCVN 4391: 2009)</option>
+                        <c:choose>
+                            <c:when test="${detailKS.HANG==1}">
+                                <option selected value="1">1 sao</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="1">1 sao</option>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${detailKS.HANG==2}">
+                                <option selected value="2">2 sao</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="2">2 sao</option>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${detailKS.HANG==3}">
+                                <option selected value="3">3 sao</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="3">3 sao</option>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${detailKS.HANG==4}">
+                                <option selected value="4">4 sao</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="4">4 sao</option>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${detailKS.HANG==5}">
+                                <option selected value="5">5 sao</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="5">5 sao</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                    <label for="inputGroupSelect01">Tiêu chuẩn khách sạn (TCVN 4391: 2009)</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select style="height: 4rem" class="form-select" id="inputGroupSelect01" name="ngung" required>
+                        <option selected>Trạng thái hoạt động</option>
+                        <c:choose>
+                            <c:when test="${detailKS.NGUNG==true}">
+                                <option selected value="true">Đã ngừng hoạt động</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="true">Đã ngừng hoạt động</option>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${detailKS.NGUNG==false}">
+                                <option selected value="false">Đang hoạt động</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="false">Đang hoạt động</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                    <label for="inputGroupSelect01">Trạng thái hoạt động</label>
+                </div>
+                <div style="margin-top: 1rem">
+                    <input type="submit" class="btn btn-success" value="Lưu thay đổi">
+                    <a href="KhachSanControl">
+                        <button style="width: 5rem" class="btn btn-outline-warning">Hủy</button>
+                    </a>
+                </div>
+            </form>
         </div>
         <jsp:include page="Footer.jsp"></jsp:include>
         <script src="js/manager.js" type="text/javascript"></script>

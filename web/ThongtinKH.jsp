@@ -81,7 +81,7 @@
             </div>
             <div class="row justify-content-md-center" style="margin-bottom:10rem">
                 <div class="col col-lg-2">
-                    <a type="button" href="loadTaiKhoanControl?IDTK=" class="btn btn-outline-success">Thay đổi thông tin</a>
+                    <a type="button" href="loadKH?idkh=${tk.IDKHACHHANG}" class="btn btn-outline-success">Thay đổi thông tin</a>
                 </div>
             </div>
         </div>

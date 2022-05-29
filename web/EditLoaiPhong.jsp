@@ -25,58 +25,85 @@
         <jsp:include page="Header.jsp"></jsp:include>
             <div class="container">
                 <h2>Quản lý <b>Loại phòng</b></h2>
-                <form action="EditLoaiPhongControl" method="post">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Thông tin loại phòng</h4>
-                        <a class="navbar-brand" href="LoaiPhongControl"> <button type="button" class="btn-close" aria-label="Close"></button></a>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>ID loại phòng</label>
-                            <input value="${detailLP.IDLOAIPHONG}" name="IDLP" type="text" class="form-control" readonly required>
-                    </div>
-                    <div class="form-group">
-                        <label>Mã khách sạn</label>
-                        <input value="${detailLP.MAKHACHSAN}" name="maks" type="text" class="form-control" readonly required>
-                    </div>
-                    <div class="form-group">
-                        <label>Tên loại phòng</label>
-                        <textarea name="tenloaiphong" class="form-control" required>${detailLP.TENLOAIPHONG}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Mô tả</label>
-                        <textarea name="mota" style="height: 20rem" class="form-control" required>${detailLP.MOTA}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Hình ảnh</label>
-                        <input value="${detailLP.HINHANH}" name="hinh" type="text" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Giá phòng</label>
-                        <input value="${detailLP.GIAPHONG}" name="gia" type="text" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Số lượng</label>
-                        <input value="${detailLP.SOLUONG}" name="sl" type="text" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Trạng thái: </label>
-                        <c:choose>
-                            <c:when test="${detailLP.TRANGTHAI==true}"><input name="trangthai" type="checkbox" value="true" checked="true"></c:when>
-                            <c:otherwise><input name="trangthai" type="checkbox" value="true"></c:otherwise>
-                        </c:choose>
-                    </div>
-                    <div class="form-group">
-                        <label>Ngừng: </label>
-                        <c:choose>
-                            <c:when test="${detailLP.NGUNG==true}"><input name="ngung" type="checkbox" value="true" checked="true"></c:when>
-                            <c:otherwise><input name="ngung" type="checkbox" value="true"></c:otherwise>
-                        </c:choose>
-                    </div>
+                <form action="EditLoaiPhongControl" method="post" enctype="multipart/form-data">
+
+                    <input value="${detailLP.IDLOAIPHONG}" name="IDLP" type="text" class="form-control"  hidden>
+                <input value="${detailLP.HINHANH}" name="ha" type="text" class="form-control"  hidden>
+                <input value="${detailLP.MAKHACHSAN}" name="maks" type="text" class="form-control" hidden required>
+
+                <div class="form-floating mb-3">
+                    <input id="a1" placeholder="Tên loại phòng" name="tenloaiphong" value="${detailLP.TENLOAIPHONG}" class="form-control" required>
+                    <label for="a1">Loại phòng</label>
                 </div>
-                <div class="modal-header">
-                    <input type="submit" class="btn btn-success" value="Đồng ý">
+                <div class="form-floating mb-3">
+                    <textarea id="a2" placeholder="Mô tả"  name="mota" style="height: 8rem" class="form-control" required>${detailLP.MOTA}</textarea>
+                    <label for="a2">Mô tả</label>
                 </div>
+
+                <div class="input-group mb-3">
+                    <input style="height: 4rem" value="${detailKS.HINHANH}" placeholder="Hình ảnh" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" type="file" class="form-control" id="image" name="image" accept="image/*" onchange="ImagesFileAsURL()"/>
+                    <label style="height: 4rem" style="color:${sessionScope.mamauchu}; background-color: ${sessionScope.mamau};" class="input-group-text" for="image">Hình ảnh khách sạn</label>
+                </div>
+
+                <div id="displayImg">
+                </div>
+
+                <script type="text/javascript">
+                    function ImagesFileAsURL() {
+                        var fileSelected = document.getElementById('image').files;
+                        if (fileSelected.length > 0) {
+                            var fileToLoad = fileSelected[0];
+                            var fileReader = new FileReader();
+                            fileReader.onload = function (fileLoaderEvent) {
+                                var srcData = fileLoaderEvent.target.result;
+                                var newImage = document.createElement('img');
+                                newImage.src = srcData;
+                                document.getElementById('displayImg').innerHTML = newImage.outerHTML;
+                            }
+                            fileReader.readAsDataURL(fileToLoad);
+                        }
+                    }
+                </script>
+
+                <div class="form-floating mb-3">
+                    <input id="a3" placeholder="Giá phòng"  value="${detailLP.GIAPHONG}" name="gia" type="text" class="form-control" required>
+                    <label for="a3">Giá phòng</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input id="a4" placeholder="Số lượng" value="${detailLP.SOLUONG}" name="sl" type="text" class="form-control" required>
+                    <label for="a4">Số lượng</label>
+                </div>
+
+
+
+                <div class="form-floating mb-3">
+                    <select style="height: 4rem" class="form-select" id="inputGroupSelect01" name="ngung" required>
+                        <option selected>Trạng thái hoạt động</option>
+                        <c:choose>
+                            <c:when test="${detailKS.NGUNG==true}">
+                                <option selected value="true">Đã ngừng hoạt động</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="true">Đã ngừng hoạt động</option>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${detailKS.NGUNG==false}">
+                                <option selected value="false">Đang hoạt động</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="false">Đang hoạt động</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                    <label for="inputGroupSelect01">Trạng thái hoạt động</label>
+                </div>
+                    
+                <input type="submit" class="btn btn-success" value="Đồng ý">
+                <a href="LoaiPhongControl">
+                    <button style="width: 5rem" class="btn btn-outline-warning">Hủy</button>
+                </a>
             </form>
         </div>
         <jsp:include page="Footer.jsp"></jsp:include>

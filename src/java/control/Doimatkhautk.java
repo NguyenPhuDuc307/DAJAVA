@@ -6,24 +6,27 @@ package control;
 
 import dao.DAO;
 import dao.objTaiKhoan;
-import entity.Khachsan;
-import entity.TaikhoanFull;
+import entity.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
- * @author bigbo
+ * @author nguye
  */
-@WebServlet(name = "TaiKhoanControl", urlPatterns = {"/TaiKhoanControl"})
-public class TaiKhoanControl extends HttpServlet {
+@WebServlet(name = "Doimatkhautk", urlPatterns = {"/doimatkhautk"})
+public class Doimatkhautk extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,26 +37,47 @@ public class TaiKhoanControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
-
         try ( PrintWriter out = response.getWriter()) {
-            objTaiKhoan dao = new objTaiKhoan();
-            List<TaikhoanFull> list = dao.getAllTaiKhoanFull();
-            
-            DAO ks = new DAO();
-            
-            HttpSession session = request.getSession();
-            session.removeAttribute("tttk");
-            session.removeAttribute("doimktc");
-            
-            List<Khachsan> listorder = ks.getAllKhachsans();
-            request.setAttribute("listKSorder", listorder);
 
-            request.setAttribute("listTK", list);
-            request.getRequestDispatcher("TaiKhoan.jsp").forward(request, response);
+            String idtk = request.getParameter("idtk");
+            String passcu = request.getParameter("passcu");
+            String pass = request.getParameter("pass");
+
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(passcu.getBytes());
+            byte[] digest = md.digest();
+            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            
+            MessageDigest md1 = MessageDigest.getInstance("MD5");
+            md1.update(pass.getBytes());
+            byte[] digest1 = md1.digest();
+            String myHash1 = DatatypeConverter.printHexBinary(digest1).toUpperCase();
+
+            DAO dao = new DAO();
+            Account b = dao.LoginADid(idtk, myHash);
+
+            if (b != null) {
+                objTaiKhoan tk = new objTaiKhoan();
+
+                tk.doimktk(idtk, myHash1);
+
+                response.sendRedirect("loadTaiKhoanControl?IDTK=" + idtk);
+                
+                HttpSession session = request.getSession();
+                session.setAttribute("doimktc", true);
+                
+            }else{
+                response.sendRedirect("loadTaiKhoanControl?IDTK=" + idtk);
+                
+                HttpSession session = request.getSession();
+                session.setAttribute("doimktc", false);
+                
+            }
+            
+
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -68,7 +92,11 @@ public class TaiKhoanControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Doimatkhautk.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -82,7 +110,11 @@ public class TaiKhoanControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Doimatkhautk.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

@@ -25,6 +25,7 @@ public class QuanlyDP extends HttpServlet {
         
         DAO dao = new DAO();
         HttpSession session = request.getSession();
+        
         Account a = (Account)  session.getAttribute( "acc");
         String mks = a.getMAKHACHSAN();
         List<enQuanlyDP> list = dao.getQuanlyDP(mks);
@@ -36,9 +37,13 @@ public class QuanlyDP extends HttpServlet {
         List<enQuanlyDP> listthang = dao.getQuanlyDPTHANG(mks);
         
         request.setAttribute("listDP", list);
+        request.setAttribute("listDPsum", list.size());
         request.setAttribute("listDPHN", listhn);
+        request.setAttribute("listDPsumhn", listhn.size());
         request.setAttribute("listDPTUAN", listtuan);
+        request.setAttribute("listDPsumtuan", listtuan.size());
         request.setAttribute("listDPTHANG", listthang);
+        request.setAttribute("listDPsumthang", listthang.size());
         request.getRequestDispatcher("QuanlyDP.jsp").forward(request, response);
     }
 

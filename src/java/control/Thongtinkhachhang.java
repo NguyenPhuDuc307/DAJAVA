@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "Thongtinkhachhang", urlPatterns = {"/thongtinkhachhang"})
 public class Thongtinkhachhang extends HttpServlet {
@@ -23,6 +24,8 @@ public class Thongtinkhachhang extends HttpServlet {
         
         
         request.setAttribute("tk", kh);
+        HttpSession session = request.getSession();
+        session.removeAttribute("doimktc");
         
         request.getRequestDispatcher("ThongtinKH.jsp").forward(request, response);
         

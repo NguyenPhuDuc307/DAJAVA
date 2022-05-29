@@ -93,14 +93,19 @@
                     <a class="navbar-brand" href="datphong?id=${sessionScope.maloaiphong}"><button type="button" class="btn btn-success" aria-label="Close">Trở về</button></a>
                 </div>
 
-                <input type="text" value="${sessionScope.idkh}" name="idkh" style="visibility: hidden">
-                <input type="text" value="${sessionScope.maloaiphong}" name="maloaiphong" style="visibility: hidden">
-                <input type="text" value="${sessionScope.ngayden}" name="ngayden" style="visibility: hidden">
-                <input type="text" value="${sessionScope.ngaydi}" name="ngaydi" style="visibility: hidden">
-                <input type="text" value="${sessionScope.thanhtien}" name="thanhtien" style="visibility: hidden">
-                <input type="text" value="${sessionScope.idDP}" name="idDP" style="visibility: hidden">
-                <input type="text" value="${sessionScope.songuoi}" name="songuoi" style="visibility: hidden">
-                <input type="text" value="${sessionScope.acc.IDKHACHHANG}" name="IDKHACHHANG"style="visibility: hidden">
+                <input type="text" value="${sessionScope.idkh}" name="idkh" hidden>
+                <input type="text" value="${sessionScope.maloaiphong}" name="maloaiphong" hidden>
+                <input type="text" value="${sessionScope.ngayden}" name="ngayden" hidden>
+                <input type="text" value="${sessionScope.ngaydi}" name="ngaydi" hidden>
+                <input type="text" value="${sessionScope.thanhtien}" name="thanhtien" hidden>
+                <input type="text" value="${sessionScope.idDP}" name="idDP" hidden>
+                <input type="text" value="${sessionScope.songuoi}" name="songuoi" hidden>
+                <input type="text" value="${sessionScope.acc.IDKHACHHANG}" name="IDKHACHHANG" hidden>
+                <input type="text" value="${sessionScope.acc.EMAIL}" name="email" hidden>
+                <input type="text" value="${sessionScope.acc.HOTEN}" name="hoten" hidden>
+                <input type="text" value="${sessionScope.acc.DIENTHOAI}" name="dienthoai" hidden>
+                <input type="text" value="${sessionScope.loaiphong1}" name="loaiphong" hidden>
+                <input type="text" value="${sessionScope.tenkhachsan}" name="tenkhachsan" hidden>
             </form>
 
         </div>

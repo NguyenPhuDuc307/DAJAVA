@@ -1,8 +1,11 @@
 package control;
 
+import dao.DAO;
 import dao.objTaiKhoan;
+import entity.Khachsan;
 import entity.TaiKhoan;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +22,11 @@ public class loadTaiKhoanControl extends HttpServlet {
         String idTK = request.getParameter("IDTK");
         objTaiKhoan dao = new objTaiKhoan();
         TaiKhoan tk = dao.getTaiKhoanByID(idTK);
-        
+        DAO ks = new DAO();
+
+        List<Khachsan> listorder = ks.getAllKhachsans();
+        request.setAttribute("listKSorder", listorder);
+
         request.setAttribute("detailTK", tk);
         request.getRequestDispatcher("EditTaiKhoan.jsp").forward(request, response);
     }

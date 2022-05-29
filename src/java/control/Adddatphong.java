@@ -29,6 +29,7 @@ public class Adddatphong extends HttpServlet {
         
         int IDKHACHHANG = Integer.valueOf(request.getParameter("IDKHACHHANG"));
         String GHICHU = request.getParameter("GHICHU");
+        String tenkhachsan = request.getParameter("tenkhachsan");
         Boolean TRANGTHAI = false;
         
         dao.addDatphong(IDKHACHHANG, GHICHU, TRANGTHAI);
@@ -66,6 +67,7 @@ public class Adddatphong extends HttpServlet {
         session.setAttribute("ngayden", gdDateTime);
         session.setAttribute("ngaydi", gtDateTime);
         session.setAttribute("thanhtien", thanhtien);
+        session.setAttribute("tenkhachsan", tenkhachsan);
         session.setAttribute("ghichu", GHICHU);
         session.setAttribute("idDP", datphong.getIDDATPHONG());
         session.setAttribute("giaphong", giaphong);

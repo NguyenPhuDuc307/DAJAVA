@@ -7,17 +7,23 @@ package control;
 import dao.objLoaiPhong;
 import entity.Account;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author bigbo
  */
+@MultipartConfig
 @WebServlet(name = "AddLoaiPhongControl", urlPatterns = {"/AddLoaiPhongControl"})
 public class AddLoaiPhongControl extends HttpServlet {
 
@@ -30,61 +36,57 @@ public class AddLoaiPhongControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
-        String TENLOAIPHONG = request.getParameter("TENLOAIPHONG");
-        String MOTA = request.getParameter("MOTA");
-        String HINHANH = request.getParameter("HINHANH");
-        String GIAPHONG = request.getParameter("GIAPHONG");
-        String SOLUONG = request.getParameter("SOLUONG");
-        Boolean TRANGTHAI =Boolean.valueOf(request.getParameter("TRANGTHAI"));
-        Boolean NGUNG = Boolean.valueOf(request.getParameter("NGUNG"));
-        
-        HttpSession session = request.getSession();
-        Account a =(Account)  session.getAttribute( "acc");
-        String maks = a.getMAKHACHSAN();
-        
-        objLoaiPhong dao = new objLoaiPhong();
-        dao.addLoaiPhong(TENLOAIPHONG, MOTA, HINHANH, GIAPHONG, SOLUONG, TRANGTHAI, NGUNG, maks);
-        response.sendRedirect("LoaiPhongControl");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        RequestDispatcher rd = request.getRequestDispatcher("LoaiPhong.jsp");
+        rd.forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        try {
+            Part part = request.getPart("image");
+
+            String repaString = request.getServletContext().getRealPath("/images");
+            String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+
+            if (!Files.exists(Paths.get(repaString))) {
+                Files.createDirectories(Paths.get(repaString));
+            }
+            part.write(repaString + "/" + filename);
+            String HINHANH = "images/" + filename;
+
+            String TENLOAIPHONG = request.getParameter("TENLOAIPHONG");
+            String MOTA = request.getParameter("MOTA");
+            String GIAPHONG = request.getParameter("GIAPHONG");
+            String SOLUONG = request.getParameter("SOLUONG");
+            Boolean TRANGTHAI = Boolean.valueOf(request.getParameter("TRANGTHAI"));
+            Boolean NGUNG = Boolean.valueOf(request.getParameter("NGUNG"));
+
+            HttpSession session = request.getSession();
+            Account a = (Account) session.getAttribute("acc");
+            String maks = a.getMAKHACHSAN();
+
+            objLoaiPhong dao = new objLoaiPhong();
+            dao.addLoaiPhong(TENLOAIPHONG, MOTA, HINHANH, GIAPHONG, SOLUONG, TRANGTHAI, NGUNG, maks);
+            response.sendRedirect("LoaiPhongControl");
+
+        } catch (Exception e) {
+        }
+
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

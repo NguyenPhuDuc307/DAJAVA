@@ -27,11 +27,12 @@ public class enQuanlyDP {
     private int SOGIOHT;
     private Integer THANHTIENHT;
     private int QUAGIO;
+    private String EMAIL;
 
     public enQuanlyDP() {
     }
 
-    public enQuanlyDP(String GHICHU, boolean TRANGTHAI, int SONGUOIO, Timestamp GIODAT, Timestamp GIOTRA, Integer THANHTIEN, String HOTEN, String DIENTHOAI, String TENLOAIPHONG, int GIAPHONG, int IDDATPHONG, int IDDPCT, String TENKHACHSAN, int SOGIOHT, Integer THANHTIENHT, int QUAGIO) {
+    public enQuanlyDP(String GHICHU, boolean TRANGTHAI, int SONGUOIO, Timestamp GIODAT, Timestamp GIOTRA, Integer THANHTIEN, String HOTEN, String DIENTHOAI, String TENLOAIPHONG, int GIAPHONG, int IDDATPHONG, int IDDPCT, String TENKHACHSAN, int SOGIOHT, Integer THANHTIENHT, int QUAGIO, String EMAIL) {
         this.GHICHU = GHICHU;
         this.TRANGTHAI = TRANGTHAI;
         this.SONGUOIO = SONGUOIO;
@@ -48,6 +49,7 @@ public class enQuanlyDP {
         this.SOGIOHT = SOGIOHT;
         this.THANHTIENHT = THANHTIENHT;
         this.QUAGIO = QUAGIO;
+        this.EMAIL = EMAIL;
     }
 
     public String getGHICHU() {
@@ -176,6 +178,19 @@ public class enQuanlyDP {
 
     public void setQUAGIO(int QUAGIO) {
         this.QUAGIO = QUAGIO;
+    }
+
+    public String getEMAIL() {
+        return EMAIL;
+    }
+
+    public void setEMAIL(String EMAIL) {
+        this.EMAIL = EMAIL;
+    }
+
+    @Override
+    public String toString() {
+        return "enQuanlyDP{" + "GHICHU=" + GHICHU + ", TRANGTHAI=" + TRANGTHAI + ", SONGUOIO=" + SONGUOIO + ", GIODAT=" + GIODAT + ", GIOTRA=" + GIOTRA + ", THANHTIEN=" + THANHTIEN + ", HOTEN=" + HOTEN + ", DIENTHOAI=" + DIENTHOAI + ", TENLOAIPHONG=" + TENLOAIPHONG + ", GIAPHONG=" + GIAPHONG + ", IDDATPHONG=" + IDDATPHONG + ", IDDPCT=" + IDDPCT + ", TENKHACHSAN=" + TENKHACHSAN + ", SOGIOHT=" + SOGIOHT + ", THANHTIENHT=" + THANHTIENHT + ", QUAGIO=" + QUAGIO + ", EMAIL=" + EMAIL + '}';
     }
     
     

@@ -5,9 +5,8 @@
 package control;
 
 import dao.DAO;
-import entity.Khachsan;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author bigbo
+ * @author nguye
  */
-@WebServlet(name = "KhachSanControl", urlPatterns = {"/KhachSanControl"})
-public class KhachSanControl extends HttpServlet {
+@WebServlet(name = "HuyDon", urlPatterns = {"/HuyDon"})
+public class HuyDon extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -32,11 +31,31 @@ public class KhachSanControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        DAO dao = new DAO();
-        List<Khachsan> list = dao.getAllKhachsans();
-        
-        request.setAttribute("listKS", list);
-        request.getRequestDispatcher("KhachSan.jsp").forward(request, response);
+        try ( PrintWriter out = response.getWriter()) {
+
+            String madon = request.getParameter("madon");
+            String email = request.getParameter("email");
+            String gd = request.getParameter("gd");
+
+            DAO dao = new DAO();
+            dao.deleteDP(madon);
+
+            String tieude = "Don dat phong da duoc huy";
+            String message = "<!DOCTYPE html>\n"
+                    + "<html>\n"
+                    + "        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3\" crossorigin=\"anonymous\">\n"
+                    + "    </head>\n"
+                    + "    <body>\n"
+                    + "        <div class=\"container\">\n"
+                    + "            <h3>Đơn đặt phòng lúc "+ gd +" đã được hủy thành công tại <b style=\"color:blue\">VN</b><b style=\"color:orange\">BOOKING</b></h3>\n"
+                    + "            <h3>Trân trọng!</h3>\n"
+                    + "        </div>\n"
+                    + "    </body>\n"
+                    + "</html>";
+            SeenMail.send(email, tieude, message, "nguyenphuduc62001@gmail.com", "Phuduc@30072001");
+
+            response.sendRedirect("quanlydatphong");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

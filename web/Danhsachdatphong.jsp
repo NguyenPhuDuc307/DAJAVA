@@ -50,7 +50,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <td style="color:red">
-                                        Nhấn để hủy
+                                        Chưa thanh toán
                                     </td>
                                 </c:otherwise>
                             </c:choose>

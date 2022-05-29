@@ -103,9 +103,10 @@
                                         <img style="height: 300px; width: 100%; object-fit:cover;" src="${loaiphong.HINHANH}" class="img-fluid rounded-start" alt="">
 
                                         <div style="display:flex">
-                                            <input type="text" value="${sessionScope.acc.IDKHACHHANG}" name="IDKHACHHANG"style="visibility: hidden">
-                                            <input type="text" value="${loaiphong.IDLOAIPHONG}" name="MALOAIPHONG" style="visibility: hidden">
-                                            <input type="text" value="${loaiphong.IDLOAIPHONG}" name="idLP" style="visibility: hidden">
+                                            <input type="text" value="${sessionScope.acc.IDKHACHHANG}" name="IDKHACHHANG" hidden>
+                                            <input type="text" value="${loaiphong.IDLOAIPHONG}" name="MALOAIPHONG" hidden>
+                                            <input type="text" value="${loaiphong.IDLOAIPHONG}" name="idLP" hidden>
+                                            <input type="text" value="${ks.TENKHACHSAN}" name="tenkhachsan" hidden>
                                         </div>
 
 

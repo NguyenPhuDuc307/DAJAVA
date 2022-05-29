@@ -58,7 +58,7 @@ public class LoginControl extends HttpServlet {
                     session.setAttribute("istk", false);
                     session.setAttribute("iskh", true);
                     //  session ton tai 10p
-                    session.setMaxInactiveInterval(600);
+                    session.setMaxInactiveInterval(6000);
                     xn = true;
                     List<enQuanlyDP> listDP = dao.getDatPhongChuaTT(a.getIDKHACHHANG());
 

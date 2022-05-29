@@ -12,6 +12,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>VNBooking | Trang chủ</title>
+        
         <link rel="icon" href="images/logo.svg" type="image/x-icon">
         <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -269,11 +270,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Giá tối thiểu</label>
-                                        <input type="number" name="giatt" maxFractionDigits = "3" class="form-control" value="800000">
+                                        <input style="background-color: ${sessionScope.mamau}; color: ${sessionScope.mamauchu}" type="number" name="giatt" maxFractionDigits = "3" class="form-control" value="800000">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Giá tối đa</label>
-                                        <input type="number" name="giatd" maxFractionDigits = "3" class="form-control" value="1200000">
+                                        <input style="background-color: ${sessionScope.mamau}; color: ${sessionScope.mamauchu}" type="number" name="giatd" maxFractionDigits = "3" class="form-control" value="1200000">
                                     </div>
                                     <div class="col-md-3">
                                         <input style="margin-top: 32px" type="submit" class="btn btn-outline-warning" value="Lọc theo giá">
@@ -300,7 +301,8 @@
                                         <a style="text-decoration: none" href="datphong?id=${k.IDLOAIPHONG}">
                                             <h4 class="card-title">${k.TENLOAIPHONG}</h4>
                                         </a>
-                                        <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 7;overflow: hidden;" class="card-text">${k.MOTA}</p>
+                                            <h6 style="color: orange">KS: ${k.TENKHACHSAN}</h6>
+                                        <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 6;overflow: hidden;" class="card-text">${k.MOTA}</p>
                                         <h6 style="color: red">Giá phòng: <fmt:formatNumber type = "number" maxFractionDigits = "3" value = "${k.GIAPHONG}" />₫/ngày</h6>
                                     </div>
                                 </div>

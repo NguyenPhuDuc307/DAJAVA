@@ -4,22 +4,26 @@
  */
 package control;
 
-import dao.DAO;
-import entity.Khachsan;
+import dao.objTaiKhoan;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
+import java.nio.file.Paths;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
- * @author bigbo
+ * @author nguye
  */
-@WebServlet(name = "KhachSanControl", urlPatterns = {"/KhachSanControl"})
-public class KhachSanControl extends HttpServlet {
+@MultipartConfig
+@WebServlet(name = "doianhdaidienkh", urlPatterns = {"/doianhdaidienkh"})
+public class doianhdaidienkh extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -32,11 +36,18 @@ public class KhachSanControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        DAO dao = new DAO();
-        List<Khachsan> list = dao.getAllKhachsans();
-        
-        request.setAttribute("listKS", list);
-        request.getRequestDispatcher("KhachSan.jsp").forward(request, response);
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet doianhdaidienkh</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet doianhdaidienkh at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -51,7 +62,8 @@ public class KhachSanControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        RequestDispatcher rd = request.getRequestDispatcher("EditKH.jsp");
+        rd.forward(request, response);
     }
 
     /**
@@ -65,7 +77,30 @@ public class KhachSanControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            Part part = request.getPart("image");
+
+            String hinh;
+            String repaString = request.getServletContext().getRealPath("/images");
+            String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+
+            if (filename == null || filename.equals("")) {
+                filename = request.getParameter("ha");
+                hinh = filename;
+            } else {
+                part.write(repaString + "/" + filename);
+                hinh = "images/" + filename;
+            }
+            String idkh = request.getParameter("idkh");
+
+            objTaiKhoan dao = new objTaiKhoan();
+            
+            dao.doianhdaidienkh(idkh, hinh);
+
+            response.sendRedirect("loadKH?idkh=" + idkh);
+
+        } catch (Exception e) {
+        }
     }
 
     /**
